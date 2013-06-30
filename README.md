@@ -7,5 +7,3 @@ Generate a pretty graph showing the languages you use on Github.
 
 The graph in generated using [d3.js](http://d3js.org/). The colors are the same that github uses (thanks to [doda](https://github.com/doda/github-language-colors)). 
 It can be customized and embedded on any site using a snapshot of your data (to prevent viewers from hitting the rate limit).
-
-Based on [this repository](https://github.com/aaronpk/Github-Language-Graph).
