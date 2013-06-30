@@ -34,7 +34,23 @@
 
 <div class="hero-unit">
 
-  <div id="chart-container" style="width: 500px; height: 400px; float: right;"></div>
+  <div class="pull-right">
+    <div id="chart-container">
+      <div id="chart"></div>
+    </div>
+
+    <form class="form-inline">
+    <label for="size">Size:</label>
+    <div class="input-append">
+      <input type="number" id="size" min="32" max="512" value="400">
+      <span class="add-on">px</span>
+    </div>
+    <button id="render" type="submit" class="btn btn-primary">Render</button>
+    </form>
+
+    <label for="embed">Embed: (No plugins required)</label>
+    <textarea rows="3" id="embed" readonly></textarea>
+  </div>
 
   <h1>Languages</h1>
   <p>What programming languages do you use on Github?</p>
@@ -72,12 +88,6 @@
 
   <div style="clear:both;"></div>
 </div>
-
- <!-- Footer
-  ================================================== -->
-  <footer class="footer">
-    <p>By <a href="https://github.com/aaronpk">aaronpk</a>.</p>
-  </footer>
 
 </div><!-- /container -->
 

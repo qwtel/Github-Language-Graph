@@ -1,5 +1,18 @@
 body {
-  padding-top: 60px;
+  padding-top: 75px;
+}
+
+.hero-unit {
+  min-height: 400px;
+}
+
+#chart-container {
+  margin-bottom: 25px;
+}
+
+#embed {
+  width: 100%;
+  cursor: pointer;
 }
 
 .username-field {

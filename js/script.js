@@ -1,11 +1,20 @@
-//var profile = {gravatar_id: "a5b4032eaad882492772f4d6d34a9122"};
-var profile = {};
+var profile = {gravatar_id: "a5b4032eaad882492772f4d6d34a9122"};
+//var profile = {};
 var languages = {};
 var chart;
 
 $(function(){
 	
 	var self=this;
+
+  $('#embed').click(function() { $(this).select(); });
+  $('#render').click(function() { 
+    var $s = $('#size');
+    var s = $s.val();
+    if(s >= parseInt($s.attr('min')) && s <= parseInt($s.attr('max'))) {
+      updateLanguageGraph();
+    }
+  });
 	
 	this.showresults=function(username) {
 		$("#result").show();
@@ -19,37 +28,37 @@ $(function(){
     $("#result-username").text(username);
     $("#username").val("");
 
-    $.getJSON("https://api.github.com/users/"+username+"?callback=?", function(data) {
-      profile = data.data
+    //$.getJSON("https://api.github.com/users/"+username+"?callback=?", function(data) {
+    //  profile = data.data
 
-      $.getJSON("https://api.github.com/users/"+username+"/repos?callback=?", function(data) {
-        $(data.data).each(function(i,d) {
-          repos.push(d.url+"/languages");
-          completed++;
-        });
+    //  $.getJSON("https://api.github.com/users/"+username+"/repos?callback=?", function(data) {
+    //    $(data.data).each(function(i,d) {
+    //      repos.push(d.url+"/languages");
+    //      completed++;
+    //    });
 
 
-        $("#result-repo-count").text(repos.length + " Repositories");
-        $(repos).each(function(i,r) {
-          $.getJSON(r+"?callback=?", function(data) {
-            for(lang in data.data) {
-              var lines = data.data[lang];
-              if(!languages[lang]) {
-                languages[lang] = lines;
-              } else {
-                languages[lang] += lines;
-              }
-            }
+    //    $("#result-repo-count").text(repos.length + " Repositories");
+    //    $(repos).each(function(i,r) {
+    //      $.getJSON(r+"?callback=?", function(data) {
+    //        for(lang in data.data) {
+    //          var lines = data.data[lang];
+    //          if(!languages[lang]) {
+    //            languages[lang] = lines;
+    //          } else {
+    //            languages[lang] += lines;
+    //          }
+    //        }
 
-            // draw graph when finished
-            if (!--completed) updateLanguageGraph();
+    //        // draw graph when finished
+    //        if (!--completed) updateLanguageGraph();
 
-          });
-        });
-      });
-    });
+    //      });
+    //    });
+    //  });
+    //});
 
-    //updateLanguageGraph();
+    updateLanguageGraph();
   }
 	
 	$("#btn-go").click(function(){
@@ -67,13 +76,13 @@ $(function(){
 });
 
 function updateLanguageGraph() {
-  //languages = {
-  //  "Java": 288116,
-  //  "Shell": 253,
-  //  "Python": 15909,
-  //  "JavaScript": 1069530,
-  //  "CoffeeScript": 66623
-  //};
+  languages = {
+    "Java": 288116,
+    "Shell": 253,
+    "Python": 15909,
+    "JavaScript": 1069530,
+    "CoffeeScript": 66623
+  };
   
   var data = [];
 
@@ -96,18 +105,19 @@ function updateLanguageGraph() {
   }
 
   //chart.series[0].setData(data);  
-  var s = 400;
+  var s = $('#size').val();
   var w = s,                        //width
       h = s,                            //height
       r = s/2;                            //radius
 
-  $("#chart-container").css("position", "relative").append(
+  $("#chart").html('');
+  $("#chart").css({position: "relative", width: w, height: h}).append(
     $("<img/>")
       .css({position: "absolute", zIndex: "1", borderRadius: "100%", width: w, height: h})
       .attr("src", "https://secure.gravatar.com/avatar/"+profile.gravatar_id+"?s="+w)
     );
    
-  var vis = d3.select("#chart-container")
+  var vis = d3.select("#chart")
       .append("svg:svg")              //create the SVG element inside the <body>
       .data([data])                   //associate our data with the document
           .attr("width", w)           //set the width and height of our visualization (these will be attributes of the <svg> tag
@@ -144,6 +154,7 @@ function updateLanguageGraph() {
   //    })
   //    .attr("text-anchor", "middle")                          //center the text on it's origin
   //    .text(function(d, i) { return d.data.name; });        //get the label from our original data array
+  $('#embed').val($('#chart-container').html().replace(/^\s+|\s+$/g, ''));
 }
 
 // https://github.com/doda/github-language-colors
