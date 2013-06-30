@@ -43,13 +43,18 @@
       <form class="form-inline">
         <label for="size">Size:</label>
         <div class="input-append">
-          <input type="number" id="size" min="32" max="512" value="400">
+          <input class="input-mini" type="number" id="size" min="128" max="512" value="256">
           <span class="add-on">px</span>
         </div>
-        <button id="render" type="submit" class="btn btn-primary">Render</button>
+        <label for="radius">Avatar:</label>
+        <div class="input-append">
+          <input class="input-mini" type="number" id="radius" min="0" max="100" value="75">
+          <span class="add-on">%</span>
+        </div>
+        <button id="render" type="button" class="btn btn-primary">Render</button>
       </form>
 
-      <label for="embed">Embed: (No plugins required)</label>
+      <label for="embed">Embed: (requires jQuery)</label>
       <textarea rows="3" id="embed" readonly></textarea>
     </div>
   </div>

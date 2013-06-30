@@ -1,6 +1,11 @@
-//var profile = {gravatar_id: "a5b4032eaad882492772f4d6d34a9122"};
-var profile = {};
+var debug = true;
+if (debug) {
+  var profile = {gravatar_id: "a5b4032eaad882492772f4d6d34a9122"};
+} else {
+  var profile = {};
+}
 var languages = {};
+var totalBytes = 0;
 var chart;
 
 $(function(){
@@ -9,9 +14,11 @@ $(function(){
 
   $('#embed').click(function() { $(this).select(); });
   $('#render').click(function() { 
-    var $s = $('#size');
-    var s = $s.val();
-    if(s >= parseInt($s.attr('min')) && s <= parseInt($s.attr('max'))) {
+    check = function($s) {
+      var s = $s.val();
+      return (s >= parseInt($s.attr('min')) && s <= parseInt($s.attr('max')))
+    }
+    if (check($('#size')) && check($('#radius'))) {
       updateLanguageGraph();
     }
   });
@@ -28,37 +35,39 @@ $(function(){
     $("#result-username").text(username);
     $("#username").val("");
 
-    $.getJSON("https://api.github.com/users/"+username+"?callback=?", function(data) {
-      profile = data.data
+    if (!debug) {
+      $.getJSON("https://api.github.com/users/"+username+"?callback=?", function(data) {
+        profile = data.data
 
-      $.getJSON("https://api.github.com/users/"+username+"/repos?callback=?", function(data) {
-        $(data.data).each(function(i,d) {
-          repos.push(d.url+"/languages");
-          completed++;
-        });
+        $.getJSON("https://api.github.com/users/"+username+"/repos?callback=?", function(data) {
+          $(data.data).each(function(i,d) {
+            repos.push(d.url+"/languages");
+            completed++;
+          });
 
 
-        $("#result-repo-count").text(repos.length + " Repositories");
-        $(repos).each(function(i,r) {
-          $.getJSON(r+"?callback=?", function(data) {
-            for(lang in data.data) {
-              var lines = data.data[lang];
-              if(!languages[lang]) {
-                languages[lang] = lines;
-              } else {
-                languages[lang] += lines;
+          $("#result-repo-count").text(repos.length + " Repositories");
+          $(repos).each(function(i,r) {
+            $.getJSON(r+"?callback=?", function(data) {
+              for(lang in data.data) {
+                var lines = data.data[lang];
+                if(!languages[lang]) {
+                  languages[lang] = lines;
+                } else {
+                  languages[lang] += lines;
+                }
               }
-            }
 
-            // draw graph when finished
-            if (!--completed) updateLanguageGraph();
+              // draw graph when finished
+              if (!--completed) updateLanguageGraph();
 
+            });
           });
         });
       });
-    });
-
-    //updateLanguageGraph();
+    } else {
+      updateLanguageGraph();
+    }
   }
 	
 	$("#btn-go").click(function(){
@@ -76,18 +85,23 @@ $(function(){
 });
 
 function updateLanguageGraph() {
-  //languages = {
-  //  "Java": 288116,
-  //  "Shell": 253,
-  //  "Python": 15909,
-  //  "JavaScript": 1069530,
-  //  "CoffeeScript": 66623
-  //};
+  if (debug) {
+    languages = {
+      "Java": 288116,
+      "Shell": 253,
+      "Python": 15909,
+      "JavaScript": 1069530,
+      "CoffeeScript": 66623
+    };
+  }
   
   var data = [];
 
+  totalBytes = 0;
   for(lang in languages) {
     data.push({name: lang, y: languages[lang]});
+    totalBytes += languages[lang];
+
   }
 
   data.sort(function(a, b) {
@@ -109,43 +123,109 @@ function updateLanguageGraph() {
   var w = s,                        //width
       h = s,                            //height
       r = s/2;                            //radius
+      avatar = $('#radius').val()/100
 
   $("#chart").html('');
-  $("#chart").css({position: "relative", width: w, height: h}).append(
-    $("<img/>")
-      .css({position: "absolute", zIndex: "1", borderRadius: "100%", width: w, height: h})
-      .attr("src", "https://secure.gravatar.com/avatar/"+profile.gravatar_id+"?s="+w)
+  $("#chart").css({position: "relative", width: w, height: h});
+
+  if (avatar != 0) {
+    $("#chart").append(
+      $('<div id="chart-inner"/>')
+        .css({
+          textAlign: "center",
+          position: "absolute", 
+          top: s*(1-avatar)/2 - 1, 
+          left: s*(1-avatar)/2 - 1, 
+          width: s*(avatar) + 2, 
+          height: s*(avatar) + 2,
+          borderRadius: "100%",
+        }).append(
+          $("<img/>")
+            .attr("src", "https://secure.gravatar.com/avatar/"+profile.gravatar_id+"?s="+s)
+            .css({ borderRadius: "100%" })
+        )
     );
+  }
    
-  var vis = d3.select("#chart")
-      .append("svg:svg")              //create the SVG element inside the <body>
-      .data([data])                   //associate our data with the document
-          .attr("width", w)           //set the width and height of our visualization (these will be attributes of the <svg> tag
-          .attr("height", h)
-      .append("svg:g")                //make a group to hold our pie chart
-          .attr("transform", "translate(" + r + "," + r + ")")    //move the center of the pie chart from 0, 0 to radius, radius
+  if (avatar != 1) {
+    var vis = d3.select("#chart")
+        .append("svg:svg")              //create the SVG element inside the <body>
+        .data([data])                   //associate our data with the document
+            .attr("width", w)           //set the width and height of our visualization (these will be attributes of the <svg> tag
+            .attr("height", h)
+        .append("svg:g")                //make a group to hold our pie chart
+            .attr("transform", "translate(" + r + "," + r + ")")    //move the center of the pie chart from 0, 0 to radius, radius
 
-  $("svg").css({position: "relative", zIndex: 2});
+    $("svg").css({position: "relative", zIndex: 2});
 
-  var arc = d3.svg.arc()              //this will create <path> elements for us using arc data
-      .innerRadius(r*0.85)
-      .outerRadius(r);
+    var arc = d3.svg.arc()              //this will create <path> elements for us using arc data
+        .innerRadius(r * avatar)
+        .outerRadius(r);
 
-  var pie = d3.layout.pie()           //this will create arc data for us given a list of values
-      .value(function(d) { return d.y; });    //we must tell it out to access the value of each element in our data array
+    var pie = d3.layout.pie()           //this will create arc data for us given a list of values
+        .value(function(d) { return d.y; });    //we must tell it out to access the value of each element in our data array
 
-  var arcs = vis.selectAll("g.slice")     //this selects all <g> elements with class slice (there aren't any yet)
-      .data(pie)                          //associate the generated pie data (an array of arcs, each having startAngle, endAngle and value properties) 
-      .enter()                            //this will create <g> elements for every "extra" data element that should be associated with a selection. The result is creating a <g> for every object in the data array
-          .append("svg:g")                //create a group to hold each slice (we will have a <path> and a <text> element associated with each slice)
-              .attr("class", "slice");     //allow us to style things in the slices (like text)
-      //.style("stroke", "#f5f5f5");
+    var arcs = vis.selectAll("g.slice")     //this selects all <g> elements with class slice (there aren't any yet)
+        .data(pie)                          //associate the generated pie data (an array of arcs, each having startAngle, endAngle and value properties) 
+        .enter()                            //this will create <g> elements for every "extra" data element that should be associated with a selection. The result is creating a <g> for every object in the data array
+            .append("svg:g")                //create a group to hold each slice (we will have a <path> and a <text> element associated with each slice)
+                .attr("class", "slice")     //allow us to style things in the slices (like text)
+                .attr("data-lang", function(d) { console.log(d); return d.data.name; });
 
-      arcs.append("svg:path")
-              .attr("fill", function(d, i) { return colors[d.data.name]; } ) //set the color for each slice to be chosen from the color function defined above
-              .attr("d", arc);                                    //this creates the actual SVG path using the associated data (pie) with the arc drawing function
+        arcs.append("svg:path")
+                .attr("fill", function(d, i) { return colors[d.data.name]; } ) //set the color for each slice to be chosen from the color function defined above
+                .attr("d", arc);                                    //this creates the actual SVG path using the associated data (pie) with the arc drawing function
 
-  $('#embed').val($('#chart-container').html().replace(/^\s+|\s+$/g, ''));
+        //arcs.on("mouseenter", function(d, i) {
+        //  $('#chart-inner .lang').css({opacity: 0});
+        //  $('#chart-inner .lang-'+d.data.name).css({opacity: 1});
+        //});
+
+        //arcs.on("mouseleave", function() {
+        //  $('#chart-inner .lang').css({opacity: 0});
+        //});
+  }
+
+  var fontSize = (s*avatar/6);
+  
+  for(var i=0; i<data.length; i++) {
+    $('#chart-inner').append(
+      $('<div>')
+        .addClass("lang")
+        .addClass('lang-'+data[i].name)
+        .append($("<p/>").text(data[i].name + " ").css({fontSize: fontSize+"px", lineHeight: fontSize+"px"}))
+        .append($("<p/>").text(Math.round(data[i].y/totalBytes*100) + "%").css({fontSize: fontSize+"px", lineHeight: fontSize+"px", opacity: 0.5}))
+      .css({
+        position: "absolute",
+        top: 0,
+        left: 0,
+        backgroundColor: colors[data[i].name],
+        color: "#fff",
+        borderRadius: "100%",
+        paddingTop: Math.round((s*avatar/2) - fontSize) + "px",
+        width: "100%",
+        height: "100%",
+        boxSizing: "border-box",
+        opacity: 0
+      })
+    );
+  }
+
+  var script = ""+
+    "<script>"+
+      "$('#chart g.slice').mouseenter(function() {"+
+        "lang = $(this).data('lang');"+
+        "$('#chart-inner .lang').css({opacity: 0});"+
+        "$('#chart-inner .lang-'+lang).css({opacity: 1});"+
+      "});"+
+      "$('#chart').mouseleave(function() {"+
+        "$('#chart-inner .lang').css({opacity: 0});"+
+      "});"+
+    "</script>";
+
+  $('#chart').append($(script));
+
+  $('#embed').val($('#chart-container').html().replace(/^\s+|\s+$/g, '') + script);
 }
 
 // https://github.com/doda/github-language-colors

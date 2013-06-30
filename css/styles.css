@@ -10,6 +10,11 @@ body {
   margin-bottom: 25px;
 }
 
+.lang p {
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-weight: 100;
+}
+
 #embed {
   width: 100%;
   cursor: pointer;
@@ -17,6 +22,10 @@ body {
 
 .username-field {
   font-size: 18pt;
+}
+
+.slice {
+  //opacity: 0.5;
 }
 
 .slice text {
