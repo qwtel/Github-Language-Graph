@@ -1,7 +1,7 @@
 Github Language Graph
 =====================
 
-[![Screenshot](http://i.imgur.com/DLFgskh.png)](http://cell303.github.io/Github-Language-Graph/)
+[![Screenshot](http://media.tumblr.com/ee6c8b03b5bb52f4bbeeb2f470ee06e9/tumblr_inline_mp876ykvB41qz4rgp.jpg)](http://cell303.github.io/Github-Language-Graph/)
 
 Generate a pretty graph showing the languages you use on Github. 
 
