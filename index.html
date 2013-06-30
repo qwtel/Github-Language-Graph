@@ -39,17 +39,19 @@
       <div id="chart"></div>
     </div>
 
-    <form class="form-inline">
-    <label for="size">Size:</label>
-    <div class="input-append">
-      <input type="number" id="size" min="32" max="512" value="400">
-      <span class="add-on">px</span>
-    </div>
-    <button id="render" type="submit" class="btn btn-primary">Render</button>
-    </form>
+    <div class="result hide">
+      <form class="form-inline">
+        <label for="size">Size:</label>
+        <div class="input-append">
+          <input type="number" id="size" min="32" max="512" value="400">
+          <span class="add-on">px</span>
+        </div>
+        <button id="render" type="submit" class="btn btn-primary">Render</button>
+      </form>
 
-    <label for="embed">Embed: (No plugins required)</label>
-    <textarea rows="3" id="embed" readonly></textarea>
+      <label for="embed">Embed: (No plugins required)</label>
+      <textarea rows="3" id="embed" readonly></textarea>
+    </div>
   </div>
 
   <h1>Languages</h1>
@@ -69,7 +71,7 @@
     </form>
                           
   </div>
-  <div style="margin-top: 70px; display: none;" id="result">
+  <div style="margin-top: 70px; display: none;" class="result">
     <!--<a class="btn" href="./">Start Over</a>-->
   
     <h2 id="result-username"></h2>

@@ -1,5 +1,5 @@
-var profile = {gravatar_id: "a5b4032eaad882492772f4d6d34a9122"};
-//var profile = {};
+//var profile = {gravatar_id: "a5b4032eaad882492772f4d6d34a9122"};
+var profile = {};
 var languages = {};
 var chart;
 
@@ -17,7 +17,7 @@ $(function(){
   });
 	
 	this.showresults=function(username) {
-		$("#result").show();
+		$(".result").show();
     $("#start").hide();
 
     //_gaq.push(['_trackPageView', '/github-language-graph/'+username]);
@@ -28,37 +28,37 @@ $(function(){
     $("#result-username").text(username);
     $("#username").val("");
 
-    //$.getJSON("https://api.github.com/users/"+username+"?callback=?", function(data) {
-    //  profile = data.data
+    $.getJSON("https://api.github.com/users/"+username+"?callback=?", function(data) {
+      profile = data.data
 
-    //  $.getJSON("https://api.github.com/users/"+username+"/repos?callback=?", function(data) {
-    //    $(data.data).each(function(i,d) {
-    //      repos.push(d.url+"/languages");
-    //      completed++;
-    //    });
+      $.getJSON("https://api.github.com/users/"+username+"/repos?callback=?", function(data) {
+        $(data.data).each(function(i,d) {
+          repos.push(d.url+"/languages");
+          completed++;
+        });
 
 
-    //    $("#result-repo-count").text(repos.length + " Repositories");
-    //    $(repos).each(function(i,r) {
-    //      $.getJSON(r+"?callback=?", function(data) {
-    //        for(lang in data.data) {
-    //          var lines = data.data[lang];
-    //          if(!languages[lang]) {
-    //            languages[lang] = lines;
-    //          } else {
-    //            languages[lang] += lines;
-    //          }
-    //        }
+        $("#result-repo-count").text(repos.length + " Repositories");
+        $(repos).each(function(i,r) {
+          $.getJSON(r+"?callback=?", function(data) {
+            for(lang in data.data) {
+              var lines = data.data[lang];
+              if(!languages[lang]) {
+                languages[lang] = lines;
+              } else {
+                languages[lang] += lines;
+              }
+            }
 
-    //        // draw graph when finished
-    //        if (!--completed) updateLanguageGraph();
+            // draw graph when finished
+            if (!--completed) updateLanguageGraph();
 
-    //      });
-    //    });
-    //  });
-    //});
+          });
+        });
+      });
+    });
 
-    updateLanguageGraph();
+    //updateLanguageGraph();
   }
 	
 	$("#btn-go").click(function(){
@@ -76,13 +76,13 @@ $(function(){
 });
 
 function updateLanguageGraph() {
-  languages = {
-    "Java": 288116,
-    "Shell": 253,
-    "Python": 15909,
-    "JavaScript": 1069530,
-    "CoffeeScript": 66623
-  };
+  //languages = {
+  //  "Java": 288116,
+  //  "Shell": 253,
+  //  "Python": 15909,
+  //  "JavaScript": 1069530,
+  //  "CoffeeScript": 66623
+  //};
   
   var data = [];
 
@@ -145,15 +145,6 @@ function updateLanguageGraph() {
               .attr("fill", function(d, i) { return colors[d.data.name]; } ) //set the color for each slice to be chosen from the color function defined above
               .attr("d", arc);                                    //this creates the actual SVG path using the associated data (pie) with the arc drawing function
 
-  //arcs.append("svg:text")                                     //add a label to each slice
-  //        .attr("transform", function(d) {                    //set the label's origin to the center of the arc
-  //        //we have to make sure to set these before calling arc.centroid
-  //        d.innerRadius = 0;
-  //        d.outerRadius = r;
-  //        return "translate(" + arc.centroid(d) + ")";        //this gives us a pair of coordinates like [50, 50]
-  //    })
-  //    .attr("text-anchor", "middle")                          //center the text on it's origin
-  //    .text(function(d, i) { return d.data.name; });        //get the label from our original data array
   $('#embed').val($('#chart-container').html().replace(/^\s+|\s+$/g, ''));
 }
 
