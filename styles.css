@@ -6,4 +6,6 @@ body {
   font-size: 18pt;
 }
 
-
+.slice text {
+  fill: #fff;
+}  

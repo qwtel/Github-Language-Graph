@@ -18,68 +18,19 @@
     <![endif]-->
   </head>
 
-  <body data-spy="scroll" data-target=".subnav" data-offset="50">
-
-<div id="fb-root"></div>
-<script>(function(d, s, id) {
-  var js, fjs = d.getElementsByTagName(s)[0];
-  if (d.getElementById(id)) return;
-  js = d.createElement(s); js.id = id;
-  js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=163993483698061";
-  fjs.parentNode.insertBefore(js, fjs);
-}(document, 'script', 'facebook-jssdk'));</script>
-
-<a href="https://github.com/aaronpk/Github-Language-Graph"><img style="z-index: 7000; position: absolute; top: 0; right: 0; border: 0;" src="https://a248.e.akamai.net/assets.github.com/img/71eeaab9d563c2b3c590319b398dd35683265e85/687474703a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677261795f3664366436642e706e67" alt="Fork me on GitHub"></a>
+  <body>
 
   <!-- Navbar
     ================================================== -->
     <div class="navbar navbar-fixed-top">
       <div class="navbar-inner">
         <div class="container">
-          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </a>
           <a class="brand" href="./index.html">Your Github Languages</a>
-          <div class="nav-collapse">
-            <ul class="nav">
-<!--
-              <li class="active">
-                <a href="./index.html">Overview</a>
-              </li>
-              <li class="">
-                <a href="./scaffolding.html">Scaffolding</a>
-              </li>
-              <li class="">
-                <a href="./base-css.html">Base CSS</a>
-              </li>
-              <li class="">
-                <a href="./components.html">Components</a>
-              </li>
-              <li class="">
-                <a href="./javascript.html">Javascript plugins</a>
-              </li>
-              <li class="">
-                <a href="./less.html">Using LESS</a>
-              </li>
-              <li class="divider-vertical"></li>
-              <li class="">
-                <a href="./download.html">Customize</a>
-              </li>
-              <li class="">
-                <a href="./examples.html">Examples</a>
-              </li>
--->
-            </ul>
-          </div>
         </div>
       </div>
     </div>
 
 <div class="container">
-
-
 
 <div class="hero-unit">
 
@@ -103,7 +54,7 @@
                           
   </div>
   <div style="margin-top: 70px; display: none;" id="result">
-    <a class="btn" href="./">Start Over</a>
+    <!--<a class="btn" href="./">Start Over</a>-->
   
     <h2 id="result-username"></h2>
     <h3 id="result-repo-count"></h3>
@@ -122,10 +73,6 @@
   <div style="clear:both;"></div>
 </div>
 
-
-
-<div class="fb-like" data-href="http://aaronparecki.com/github-language-graph/" data-send="false" data-width="450" data-show-faces="true"></div>
-
  <!-- Footer
   ================================================== -->
   <footer class="footer">
@@ -140,37 +87,8 @@
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="jquery.js"></script>
-    <script src="script.js"></script>
-    <script src="highcharts.js"></script>
+    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
     <script src="bootstrap/js/bootstrap.min.js"></script>
-<!--
-    <script src="assets/js/bootstrap-transition.js"></script>
-    <script src="assets/js/bootstrap-alert.js"></script>
-    <script src="assets/js/bootstrap-modal.js"></script>
-    <script src="assets/js/bootstrap-dropdown.js"></script>
-    <script src="assets/js/bootstrap-scrollspy.js"></script>
-    <script src="assets/js/bootstrap-tab.js"></script>
-    <script src="assets/js/bootstrap-tooltip.js"></script>
-    <script src="assets/js/bootstrap-popover.js"></script>
-    <script src="assets/js/bootstrap-button.js"></script>
-    <script src="assets/js/bootstrap-collapse.js"></script>
-    <script src="assets/js/bootstrap-carousel.js"></script>
-    <script src="assets/js/bootstrap-typeahead.js"></script>
--->
-
-<script type="text/javascript">
-
-  var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', 'UA-4617305-24']);
-  _gaq.push(['_trackPageview']);
-
-  (function() {
-    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-  })();
-
-</script>
-
+    <script src="script.js"></script>
   </body>
 </html>
