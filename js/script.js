@@ -1,4 +1,4 @@
-var debug = true;
+var debug = false;
 if (debug) {
   var profile = {gravatar_id: "a5b4032eaad882492772f4d6d34a9122"};
 } else {
