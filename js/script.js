@@ -1,4 +1,4 @@
-var debug = false;
+var debug = true;
 if (debug) {
   var profile = {gravatar_id: "a5b4032eaad882492772f4d6d34a9122"};
 } else {
@@ -88,8 +88,9 @@ function updateLanguageGraph() {
   if (debug) {
     languages = {
       "Java": 288116,
+      "C++": 288116,
+      "C#": 288116,
       "Shell": 253,
-      "Python": 15909,
       "JavaScript": 1069530,
       "CoffeeScript": 66623
     };
@@ -170,29 +171,20 @@ function updateLanguageGraph() {
         .enter()                            //this will create <g> elements for every "extra" data element that should be associated with a selection. The result is creating a <g> for every object in the data array
             .append("svg:g")                //create a group to hold each slice (we will have a <path> and a <text> element associated with each slice)
                 .attr("class", "slice")     //allow us to style things in the slices (like text)
-                .attr("data-lang", function(d) { console.log(d); return d.data.name; });
+                .attr("data-lang", function(d) { return replaceSpecialChars(d.data.name); });
 
         arcs.append("svg:path")
                 .attr("fill", function(d, i) { return colors[d.data.name]; } ) //set the color for each slice to be chosen from the color function defined above
                 .attr("d", arc);                                    //this creates the actual SVG path using the associated data (pie) with the arc drawing function
-
-        //arcs.on("mouseenter", function(d, i) {
-        //  $('#chart-inner .lang').css({opacity: 0});
-        //  $('#chart-inner .lang-'+d.data.name).css({opacity: 1});
-        //});
-
-        //arcs.on("mouseleave", function() {
-        //  $('#chart-inner .lang').css({opacity: 0});
-        //});
   }
 
   var fontSize = (s*avatar/6);
-  
+
   for(var i=0; i<data.length; i++) {
     $('#chart-inner').append(
       $('<div>')
         .addClass("lang")
-        .addClass('lang-'+data[i].name)
+        .addClass("lang-"+replaceSpecialChars(data[i].name))
         .append($("<p/>").text(data[i].name + " ").css({fontSize: fontSize+"px", lineHeight: fontSize+"px"}))
         .append($("<p/>").text(Math.round(data[i].y/totalBytes*100) + "%").css({fontSize: fontSize+"px", lineHeight: fontSize+"px", opacity: 0.5}))
       .css({
@@ -226,6 +218,12 @@ function updateLanguageGraph() {
   $('#chart').append($(script));
 
   $('#embed').val($('#chart-container').html().replace(/^\s+|\s+$/g, '') + script);
+}
+
+var replaceSpecialChars = function(text) {
+  text = text.replace(/\+/g, "plus");
+  text = text.replace(/\#/g, "sharp");
+  return text
 }
 
 // https://github.com/doda/github-language-colors
