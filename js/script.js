@@ -135,10 +135,10 @@ function updateLanguageGraph() {
         .css({
           textAlign: "center",
           position: "absolute", 
-          top: s*(1-avatar)/2 - 1, 
-          left: s*(1-avatar)/2 - 1, 
-          width: s*(avatar) + 2, 
-          height: s*(avatar) + 2,
+          top: Math.round(s*(1-avatar)/2 - 1), 
+          left: Math.round(s*(1-avatar)/2 - 1), 
+          width: Math.round(s*(avatar) + 2), 
+          height: Math.round(s*(avatar) + 2),
           borderRadius: "100%",
         }).append(
           $("<img>")
@@ -160,7 +160,7 @@ function updateLanguageGraph() {
     $("svg").css({position: "relative", zIndex: 2});
 
     var arc = d3.svg.arc()              //this will create <path> elements for us using arc data
-        .innerRadius(r * avatar)
+        .innerRadius(Math.round(r * avatar))
         .outerRadius(r);
 
     var pie = d3.layout.pie()           //this will create arc data for us given a list of values
@@ -180,7 +180,7 @@ function updateLanguageGraph() {
                 .attr("d", arc);                                    //this creates the actual SVG path using the associated data (pie) with the arc drawing function
   }
 
-  var fontSize = (s*avatar/6);
+  var fontSize = Math.round(s*avatar/6);
 
   //for(var i=0; i<data.length; i++) {
     $('#chart-inner').append(
