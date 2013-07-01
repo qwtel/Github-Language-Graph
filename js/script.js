@@ -112,10 +112,10 @@ function updateLanguageGraph() {
   $("#language-table tbody").html('');
   for(var i=0; i<data.length; i++) {
     $("#language-table tbody").append(
-      $('<tr/>')
-        .append($('<td/>').text(data[i].name)
-          .prepend($('<span/>').html("&#9724 ")).css("color", colors[data[i].name]))
-        .append($('<td/>').text(data[i].y))
+      $('<tr>')
+        .append($('<td>').text(data[i].name)
+          .prepend($('<span>').html("&#9724 ")).css("color", colors[data[i].name]))
+        .append($('<td>').text(data[i].y))
     );
   }
 
@@ -131,7 +131,7 @@ function updateLanguageGraph() {
 
   if (avatar != 0) {
     $("#chart").append(
-      $('<div id="chart-inner"/>')
+      $('<div id="chart-inner">')
         .css({
           textAlign: "center",
           position: "absolute", 
@@ -141,7 +141,7 @@ function updateLanguageGraph() {
           height: s*(avatar) + 2,
           borderRadius: "100%",
         }).append(
-          $("<img/>")
+          $("<img>")
             .attr("src", "https://secure.gravatar.com/avatar/"+profile.gravatar_id+"?s="+s)
             .css({ borderRadius: "100%" })
         )
@@ -171,7 +171,9 @@ function updateLanguageGraph() {
         .enter()                            //this will create <g> elements for every "extra" data element that should be associated with a selection. The result is creating a <g> for every object in the data array
             .append("svg:g")                //create a group to hold each slice (we will have a <path> and a <text> element associated with each slice)
                 .attr("class", "slice")     //allow us to style things in the slices (like text)
-                .attr("data-lang", function(d) { return replaceSpecialChars(d.data.name); });
+                .attr("data-lang-name", function(d) { return d.data.name; })
+                .attr("data-lang-percent", function(d) { return Math.round(d.data.y/totalBytes*100) + "%"; })
+                .attr("data-lang-color", function(d) { return colors[d.data.name]; });
 
         arcs.append("svg:path")
                 .attr("fill", function(d, i) { return colors[d.data.name]; } ) //set the color for each slice to be chosen from the color function defined above
@@ -180,18 +182,17 @@ function updateLanguageGraph() {
 
   var fontSize = (s*avatar/6);
 
-  for(var i=0; i<data.length; i++) {
+  //for(var i=0; i<data.length; i++) {
     $('#chart-inner').append(
-      $('<div>')
-        .addClass("lang")
-        .addClass("lang-"+replaceSpecialChars(data[i].name))
-        .append($("<p/>").text(data[i].name + " ").css({fontSize: fontSize+"px", lineHeight: fontSize+"px"}))
-        .append($("<p/>").text(Math.round(data[i].y/totalBytes*100) + "%").css({fontSize: fontSize+"px", lineHeight: fontSize+"px", opacity: 0.5}))
+      $('<div>').attr('id', "lang")
+        //.addClass("lang-"+replaceSpecialChars(data[i].name))
+        .append($("<div>").attr('id', 'lang-name').css({fontSize: fontSize+"px", lineHeight: fontSize+"px"}))
+        .append($("<div>").attr('id', 'lang-percent').css({fontSize: fontSize+"px", lineHeight: fontSize+"px", opacity: 0.5}))
       .css({
         position: "absolute",
         top: 0,
         left: 0,
-        backgroundColor: colors[data[i].name],
+        //backgroundColor: colors[data[i].name],
         color: "#fff",
         borderRadius: "100%",
         paddingTop: Math.round((s*avatar/2) - fontSize) + "px",
@@ -201,17 +202,17 @@ function updateLanguageGraph() {
         opacity: 0
       })
     );
-  }
+  //}
 
   var script = ""+
     "<script>"+
       "$('#chart g.slice').mouseenter(function() {"+
-        "lang = $(this).data('lang');"+
-        "$('#chart-inner .lang').css({opacity: 0});"+
-        "$('#chart-inner .lang-'+lang).css({opacity: 1});"+
+        "$('#lang').css({opacity: 1, backgroundColor: $(this).data('lang-color')});"+
+        "$('#lang-name').text($(this).data('lang-name'));"+
+        "$('#lang-percent').text($(this).data('lang-percent'));"+
       "});"+
       "$('#chart').mouseleave(function() {"+
-        "$('#chart-inner .lang').css({opacity: 0});"+
+        "$('#lang').css({opacity: 0});"+
       "});"+
     "</script>";
 
@@ -220,11 +221,13 @@ function updateLanguageGraph() {
   $('#embed').val($('#chart-container').html().replace(/^\s+|\s+$/g, '') + script);
 }
 
+/*
 var replaceSpecialChars = function(text) {
   text = text.replace(/\+/g, "plus");
   text = text.replace(/\#/g, "sharp");
   return text
 }
+*/
 
 // https://github.com/doda/github-language-colors
 colors = {
