@@ -217,8 +217,7 @@ function updateLanguageGraph() {
     "</script>";
 
   $('#chart').append($(script));
-
-  $('#embed').val($('#chart-container').html().replace(/^\s+|\s+$/g, '') + script);
+  $('#embed').val($('#chart-container').html().replace(/^\s+|\s+$/g, ''));
 }
 
 /*
